@@ -35,10 +35,7 @@ def extract_frame_info(h264_file):
                 # Extract user data and temporal ID
                 metadata = extract_metadata(data, current_pos)
                 for meta_type, meta_value in metadata:
-                    if meta_type == 'user_data':
-                        print(f"Frame {frame_count} User Data: {meta_value}")
-                    elif meta_type == 'temporal_id':
-                        print(f"Frame {frame_count} Temporal ID: {meta_value}")
+                    print(f"Frame {frame_count} User Data: {meta_value}")
         
         current_pos += 1
 
@@ -56,11 +53,11 @@ def extract_metadata(data, start_pos):
     
     if sei_start == -1:
         return metadata
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     sei_start += 4  # Move past the start code and NAL unit type
     
-    sei_size = 50
+    sei_size = 40
 
     user_data = tmpdata[sei_start+2:sei_start+2+sei_size].decode('utf-8', errors='ignore')
     metadata.append(('user_data', user_data.rstrip('\x00')))

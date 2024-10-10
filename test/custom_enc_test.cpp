@@ -94,7 +94,7 @@ public:
         CLEAR(parm);
         parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         parm.parm.capture.timeperframe.numerator = 1;
-        parm.parm.capture.timeperframe.denominator = 120;
+        parm.parm.capture.timeperframe.denominator = 120;  // 120 fps, 该相机只支持120fps
 
         if (ioctl(fd_, VIDIOC_S_PARM, &parm) == -1) {
             perror("Setting Frame Rate");
