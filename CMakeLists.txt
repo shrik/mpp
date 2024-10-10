@@ -310,7 +310,7 @@ foreach( files ${ALL_SRC} )
 endforeach()
 list( SORT module_list )
 list( LENGTH module_list module_size )
-#message(STATUS "module_list: ${module_list}")
+message(STATUS "module_list: ${module_list}")
 #message(STATUS "module_size: ${module_size}")
 
 # ----------------------------------------------------------------------------

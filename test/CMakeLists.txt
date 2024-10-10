@@ -1,3 +1,10 @@
+# find_package(TURBOJPEG REQUIRED)
+include_directories("/opt/libjpeg-turbo/include/")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 # vim: syntax=cmake
 # ----------------------------------------------------------------------------
 # mpp built-in unit test case
@@ -14,7 +21,7 @@ macro(add_mpp_test module ext)
     option(${test_tag} "Build mpp ${module}.${ext} unit test" ${BUILD_TEST})
     if(${test_tag})
         add_executable(${test_name} ${file_name} mpp_event_trigger.c mpp_parse_cfg.c)
-        target_link_libraries(${test_name} ${MPP_SHARED} utils)
+        target_link_libraries(${test_name} ${MPP_SHARED} utils /opt/libjpeg-turbo/lib64/libturbojpeg.so)
         set_target_properties(${test_name} PROPERTIES FOLDER "test")
         install(TARGETS ${test_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         #add_test(NAME ${test_name} COMMAND ${test_name})
@@ -39,12 +46,15 @@ add_mpp_test(mpi_enc c)
 # mpi encoder multi-thread input / output unit test
 add_mpp_test(mpi_enc_mt cpp)
 
+
 # new mpi rc unit test
 add_mpp_test(mpi_rc2 c)
 
 # new dec multi unit test
 add_mpp_test(mpi_dec_multi c)
 
+add_mpp_test(custom_enc cpp)
+add_mpp_test(custom_dec c)
 macro(add_legacy_test module)
     set(test_name ${module}_test)
     string(TOUPPER ${test_name} test_tag)
