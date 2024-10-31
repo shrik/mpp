@@ -58,42 +58,48 @@ void os_log_trace(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_NOTICE, line, list);
+    //vsyslog(LOG_NOTICE, line, list);
+    vfprintf(stdout, line, list);
 }
 
 void os_log_debug(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_DEBUG, line, list);
+    //vsyslog(LOG_DEBUG, line, list);
+vfprintf(stdout, line, list);
 }
 
 void os_log_info(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_INFO, line, list);
+    //vsyslog(LOG_INFO, line, list);
+vfprintf(stdout, line, list);
 }
 
 void os_log_warn(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_WARNING, line, list);
+    //vsyslog(LOG_WARNING, line, list);
+vfprintf(stdout, line, list);
 }
 
 void os_log_error(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_ERR, line, list);
+    // vsyslog(LOG_ERR, line, list);
+    vfprintf(stderr, line, list);
 }
 
 void os_log_fatal(const char* tag, const char* msg, va_list list)
 {
     char line[LINE_SZ] = {0};
     snprintf(line, sizeof(line) - 1, "%s: %s", tag, msg);
-    vsyslog(LOG_CRIT, line, list);
+    //vsyslog(LOG_CRIT, line, list);
+vfprintf(stderr, line, list);
 }
 
 #endif
