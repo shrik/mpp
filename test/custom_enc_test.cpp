@@ -33,6 +33,10 @@
 #include <sstream>
 #include <iomanip>
 
+#define WIDTH 1280
+#define HEIGHT 720
+#define FPS 240
+
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
@@ -80,8 +84,8 @@ public:
 
         struct v4l2_format fmt;
         fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        fmt.fmt.pix.width = 1920;
-        fmt.fmt.pix.height = 1080;
+        fmt.fmt.pix.width = WIDTH;
+        fmt.fmt.pix.height = HEIGHT;
         fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
         fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
 
@@ -94,7 +98,7 @@ public:
         CLEAR(parm);
         parm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         parm.parm.capture.timeperframe.numerator = 1;
-        parm.parm.capture.timeperframe.denominator = 120;  // 120 fps, 该相机只支持120fps
+        parm.parm.capture.timeperframe.denominator = FPS;  // 120 fps, 该相机只支持120fps
 
         if (ioctl(fd_, VIDIOC_S_PARM, &parm) == -1) {
             perror("Setting Frame Rate");
@@ -103,7 +107,7 @@ public:
 
         struct v4l2_requestbuffers req;
         CLEAR(req);
-        req.count = 64; // Request 4 buffers
+        req.count = 16; // Request 4 buffers
         req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         req.memory = V4L2_MEMORY_MMAP;
 
@@ -776,7 +780,7 @@ MPP_RET test_mpp_enc_cfg_setup(MpiEncMultiCtxInfo *info)
          * 40 / 41 / 42         - 1080p@30fps / 1080p@30fps / 1080p@60fps
          * 50 / 51 / 52         - 4K@30fps
          */
-        mpp_enc_cfg_set_s32(cfg, "h264:level", 40);
+        mpp_enc_cfg_set_s32(cfg, "h264:level", 31);
         mpp_enc_cfg_set_s32(cfg, "h264:cabac_en", 1);
         mpp_enc_cfg_set_s32(cfg, "h264:cabac_idc", 0);
         mpp_enc_cfg_set_s32(cfg, "h264:trans8x8", 1);
@@ -947,7 +951,10 @@ MPP_RET test_mpp_run(MpiEncMultiCtxInfo *info)
         p->cam_ctx->read_frame_with_timestamp();
         p->cam_ctx->read_frame_with_timestamp();
         p->cam_ctx->read_frame_with_timestamp();
-
+        p->cam_ctx->read_frame_with_timestamp();
+        p->cam_ctx->read_frame_with_timestamp();
+        p->cam_ctx->read_frame_with_timestamp();
+        p->cam_ctx->read_frame_with_timestamp();
         auto [camFrame, timestamp] = p->cam_ctx->read_frame_with_timestamp();
         int width = (int) p->width;
         int height = (int) p->height;
@@ -1382,8 +1389,8 @@ int main(int argc, char **argv)
     cmd->fps_out_num = 30;
     // cmd->format = MPP_FMT_YUV420SP;
     cmd->format = MPP_FMT_RGB888;
-    cmd->width = 1920;
-    cmd->height = 1080;
+    cmd->width = WIDTH;
+    cmd->height = HEIGHT;
     cmd->nthreads = 1;
     cmd->frame_num = 300;
     cmd->file_input = const_cast<char*>("/dev/video0");

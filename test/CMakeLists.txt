@@ -1,5 +1,9 @@
 # find_package(TURBOJPEG REQUIRED)
-include_directories("/opt/libjpeg-turbo/include/")
+set(turbojpeg_path "/opt/libjpeg-turbo/lib64/libturbojpeg.so")
+set(turboinclude_path "/opt/libjpeg-turbo/include/")
+
+include_directories(${turboinclude_path})
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,7 +25,7 @@ macro(add_mpp_test module ext)
     option(${test_tag} "Build mpp ${module}.${ext} unit test" ${BUILD_TEST})
     if(${test_tag})
         add_executable(${test_name} ${file_name} mpp_event_trigger.c mpp_parse_cfg.c)
-        target_link_libraries(${test_name} ${MPP_SHARED} utils /opt/libjpeg-turbo/lib64/libturbojpeg.so)
+        target_link_libraries(${test_name} ${MPP_SHARED} utils ${turbojpeg_path})
         set_target_properties(${test_name} PROPERTIES FOLDER "test")
         install(TARGETS ${test_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         #add_test(NAME ${test_name} COMMAND ${test_name})
